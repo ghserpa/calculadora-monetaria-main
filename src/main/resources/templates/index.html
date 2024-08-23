@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Consulta INPC</title>
+</head>
+<body>
+<h1>Consulta de Índice INPC</h1>
+<form th:action="@{/api/inpc}" method="get">
+    <label for="periodo">Período (yyyyMM):</label>
+    <input type="text" id="periodo" name="periodo" required>
+    <button type="submit">Buscar INPC</button>
+</form>
+
+<div>
+    <h2>Resultado:</h2>
+    <p th:text="${result}">Aqui aparecerá o resultado do INPC.</p>
+</div>
+</body>
+</html>
