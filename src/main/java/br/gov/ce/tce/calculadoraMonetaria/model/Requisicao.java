@@ -12,13 +12,12 @@ import java.time.temporal.ChronoUnit;
 @Component
 public class Requisicao {
     private LocalDate dataInicial;
-    private String mesDeRecolhimento;
+    private LocalDate mesRecolhimento;
     private double valorNominal;
 
-    public long calculaMesesDeAtraso(LocalDate dataInicial) {
-       LocalDate dataAtual = LocalDate.now();
+    public long calculaMesesDeAtraso(LocalDate dataInicial, LocalDate mesRecolhimento) {
 
-        return ChronoUnit.MONTHS.between(dataInicial, dataAtual);
+        return ChronoUnit.MONTHS.between(dataInicial, mesRecolhimento);
     }
 
 }

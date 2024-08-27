@@ -4,16 +4,49 @@
     <title>Consulta INPC</title>
 </head>
 <body>
-<h1>Consulta de Índice INPC</h1>
-<form th:action="@{/api/inpc}" method="get">
-    <label for="periodo">Período (yyyyMM):</label>
-    <input type="text" id="periodo" name="periodo" required>
-    <button type="submit">Buscar INPC</button>
+<!-- Título principal em maiúsculas -->
+<h1 style="text-transform: uppercase;">ATUALIZAÇÃO MONETÁRIA E INCIDÊNCIA DE JUROS NOS VALORES APLICADOS PELO TCE/CE</h1>
+
+<!-- Seção de Dados Informados -->
+<h2>Dados Informados</h2>
+<form th:action="@{/api/calcular}" method="post">
+    <div>
+        <label for="dataInicial">Data Inicial:</label>
+        <input type="date" id="dataInicial" name="dataInicial" required>
+    </div>
+    <div>
+        <label for="mesRecolhimento">Mês de Recolhimento:</label>
+        <input type="date" id="mesRecolhimento" name="mesRecolhimento" required>
+    </div>
+    <div>
+        <label for="valorNominal">Valor Nominal:</label>
+        <span>R$</span>
+        <input type="number" step="0.01" id="valorNominal" name="valorNominal" required>
+    </div>
+    <button type="submit">Calcular</button>
 </form>
 
-<div>
-    <h2>Resultado:</h2>
-    <p th:text="${result}">Aqui aparecerá o resultado do INPC.</p>
+<!-- Mensagem de erro -->
+<div th:if="${error}">
+    <p style="color: red;" th:text="${error}"></p>
+</div>
+
+<!-- Seção de Dados Calculados -->
+<div th:if="${valorAtualizado}">
+    <h2>Dados Calculados</h2>
+    <div>
+        <label for="valorAtualizado">Valor Atualizado:</label>
+        <p id="valorAtualizado" th:text="${#numbers.formatDecimal(valorAtualizado, 1, 2)}"></p>
+    </div>
+    <div>
+        <label for="jurosMes">Juros ao Mês:</label>
+        <p id="jurosMes" th:text="${#numbers.formatDecimal(jurosMes, 1, 2)}"></p>
+    </div>
+    <div>
+        <label for="valorFinal">Valor Final:</label>
+        <p id="valorFinal" th:text="${#numbers.formatDecimal(valorFinal, 1, 2)}"></p>
+    </div>
 </div>
 </body>
 </html>
+

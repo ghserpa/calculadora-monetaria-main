@@ -1,5 +1,6 @@
 package br.gov.ce.tce.calculadoraMonetaria;
 
+import br.gov.ce.tce.calculadoraMonetaria.controller.ApiController;
 import br.gov.ce.tce.calculadoraMonetaria.model.Requisicao;
 import br.gov.ce.tce.calculadoraMonetaria.service.ApiServiceClient;
 import java.time.format.DateTimeFormatter;
@@ -25,50 +26,24 @@ public class CalculadoraMonetariaApplication {
     @Autowired
     private ApiServiceClient apiServiceClient;
 
-    public double calculaFatorAcumulado(LocalDate data) {
-
-        LocalDate dataEstabelecida = LocalDate.of(2015, 10, 1);
-
-        if (data.isEqual(dataEstabelecida)) {
-            return 1.380045;
-        }
-
-        String periodo = calculaPeriodo(data);
-
-        return calculaFatorAcumulado(data.minusMonths(1)) * (1 + Double.parseDouble(
-            String.valueOf(apiServiceClient.getInpcData(periodo))));
-    }
-
-    public double calculaValorAtualizado(double valorInicial) {
-        valorInicial = requisicao.getValorNominal();
-
-        LocalDate dataInicial = requisicao.getDataInicial();
-        LocalDate dataAtual = LocalDate.now();
-
-        double fatorAcumuladoInicial = calculaFatorAcumulado(dataInicial);
-
-        double fatorAcumuladoAtualizado = calculaFatorAcumulado(dataAtual);
+    public double calculaValorAtualizado(double fatorAcumuladoInicial, double fatorAcumuladoAtualizado, LocalDate dataInicial, LocalDate dataDeRecolhimento, double valorInicial) {
 
         double fatorDeAtualizacao = fatorAcumuladoAtualizado / fatorAcumuladoInicial;
 
-        double valorAtualizado = valorInicial * fatorDeAtualizacao;
-
-        return valorAtualizado;
+        return valorInicial * fatorDeAtualizacao;
 
     }
 
-    public double calculaValorFinal(double valorAtualizado, double taxaDeJuros,
-        LocalDate dataInicial) {
+    public double calculaJuros(double valorAtualizado, double taxaDeJuros, LocalDate dataInicial, LocalDate dataDeRecolhimento) {
 
-        dataInicial = requisicao.getDataInicial();
+        long mesesCorridos = requisicao.calculaMesesDeAtraso(dataInicial, dataDeRecolhimento);
 
-        long mesesCorridos = requisicao.calculaMesesDeAtraso(dataInicial);
+        return valorAtualizado * taxaDeJuros * mesesCorridos;
+    }
 
-        double valorComJuros = valorAtualizado * taxaDeJuros * mesesCorridos;
+    public double calculaValorFinal(double valorAtualizado, double juros) {
 
-        double valorFinal = valorAtualizado + valorComJuros;
-
-        return valorFinal;
+        return valorAtualizado + juros;
     }
 
     public String calculaPeriodo(LocalDate data) {
