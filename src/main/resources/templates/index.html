@@ -1,30 +1,100 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Consulta INPC</title>
+    <title>Calculadora Monetária</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            text-transform: uppercase;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: left;
+            color: #333;
+            border-left: 8px solid #4CAF50;
+            padding-left: 10px;
+            background-color: #e0f7fa;
+            display: inline-block;
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 40px auto;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="date"],
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
+
+
+
 </head>
 <body>
-<!-- Título principal em maiúsculas -->
-<h1 style="text-transform: uppercase;">ATUALIZAÇÃO MONETÁRIA E INCIDÊNCIA DE JUROS NOS VALORES APLICADOS PELO TCE/CE</h1>
 
-<!-- Seção de Dados Informados -->
-<h2>Dados Informados</h2>
-<form th:action="@{/api/calcular}" method="post">
-    <div>
-        <label for="dataInicial">Data Inicial:</label>
-        <input type="date" id="dataInicial" name="dataInicial" required>
-    </div>
-    <div>
-        <label for="mesRecolhimento">Mês de Recolhimento:</label>
-        <input type="date" id="mesRecolhimento" name="mesRecolhimento" required>
-    </div>
-    <div>
-        <label for="valorNominal">Valor Nominal:</label>
-        <span>R$</span>
-        <input type="number" step="0.01" id="valorNominal" name="valorNominal" required>
-    </div>
-    <button type="submit">Calcular</button>
-</form>
+<!-- Título da página -->
+<h2>ATUALIZAÇÃO MONETÁRIA E INCIDÊNCIA DE JUROS NOS VALORES APLICADOS PELO TCE/CE</h2>
+
+<!-- Caixa de formulário centralizada -->
+<div class="form-container">
+    <h3>Dados Informados</h3>
+    <form th:action="@{/api/calcular}" method="post">
+        <div>
+            <label for="dataInicial">Data Inicial:</label>
+            <input type="date" id="dataInicial" name="dataInicial" required>
+        </div>
+        <div>
+            <label for="mesRecolhimento">Mês de Recolhimento:</label>
+            <input type="date" id="mesRecolhimento" name="mesRecolhimento" required>
+        </div>
+        <div>
+            <label for="valorNominal">Valor Nominal:</label>
+            <span>R$</span>
+            <input type="number" step="0.01" id="valorNominal" name="valorNominal" required placeholder="0,00">
+        </div>
+        <button type="submit">Calcular</button>
+    </form>
+</div>
 
 <!-- Mensagem de erro -->
 <div th:if="${error}">
@@ -32,8 +102,8 @@
 </div>
 
 <!-- Seção de Dados Calculados -->
-<div th:if="${valorAtualizado}">
-    <h2>Dados Calculados</h2>
+<div th:if="${valorAtualizado}"  class="form-container">
+    <h3>Dados Calculados</h3>
     <div>
         <label for="valorAtualizado">Valor Atualizado:</label>
         <p id="valorAtualizado" th:text="${#numbers.formatDecimal(valorAtualizado, 1, 2)}"></p>

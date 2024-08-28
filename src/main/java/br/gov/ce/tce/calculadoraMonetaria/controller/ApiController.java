@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.Month;
 
 @RequiredArgsConstructor
 @Controller
@@ -42,7 +43,14 @@ public class ApiController {
 
         // Obtendo os dados de entrada da Requisicao
         LocalDate dataInicial = requisicao.getDataInicial().withDayOfMonth(1);
-        LocalDate dataDeRecolhimento = requisicao.getMesRecolhimento().withDayOfMonth(30);
+
+        LocalDate dataDeRecolhimento = requisicao.getMesRecolhimento();
+        if (dataDeRecolhimento.getMonth() == Month.FEBRUARY) {
+            dataDeRecolhimento = dataDeRecolhimento.withDayOfMonth(28);
+        } else {
+            dataDeRecolhimento = dataDeRecolhimento.withDayOfMonth(30);
+        }
+
         double valorInicial = requisicao.getValorNominal();
 
         // Verificando se os dados estão presentes
@@ -91,9 +99,9 @@ public class ApiController {
     // Calculando Fator Acumulado
     public double calculaFatorAcumulado(LocalDate data, double inpc) {
 
-        LocalDate dataEstabelecida = LocalDate.of(2015, 10, 1);
+        LocalDate dataEstabelecida = LocalDate.of(2015, 11, 1);
 
-        if (data.isEqual(dataEstabelecida)) {
+        if (data.isBefore(dataEstabelecida)) {
             return 1.380045;
         }
 
