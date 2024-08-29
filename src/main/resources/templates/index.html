@@ -126,7 +126,11 @@
 <div th:if="${valorAtualizado}"  class="form-container">
     <h3>Dados Calculados</h3>
     <div>
-        <label for="valorAtualizado">Valor Atualizado:</label>
+        <label for="valorInicial" th:text="'Valor em ' + ${dataInicial} + ':'" ></label>
+        <p id="valorInicial" th:text="${#numbers.formatDecimal(valorInicial, 1, 2)}"></p>
+    </div>
+    <div>
+        <label for="valorAtualizado">Valor Atualizado (INPC):</label>
         <p id="valorAtualizado" th:text="${#numbers.formatDecimal(valorAtualizado, 1, 2)}"></p>
     </div>
     <div>
@@ -134,7 +138,7 @@
         <p id="jurosMes" th:text="${#numbers.formatDecimal(jurosMes, 1, 2)}"></p>
     </div>
     <div>
-        <label for="valorFinal">Valor Final:</label>
+        <label for="valorFinal" th:text="'Valor total em ' + ${mesRecolhimento} + ':'" ></label>
         <p id="valorFinal" th:text="${#numbers.formatDecimal(valorFinal, 1, 2)}"></p>
     </div>
 </div>

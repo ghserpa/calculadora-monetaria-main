@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 
 @RequiredArgsConstructor
 @Controller
@@ -84,9 +85,14 @@ public class ApiController {
             double valorFinal = calculadoraMonetariaApplication.calculaValorFinal(valorAtualizado, jurosMes);
 
             // Adicionando os resultados ao modelo
+            model.addAttribute("valorInicial", requisicao.getValorNominal());
+            model.addAttribute("dataInicial", requisicao.getDataInicial()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             model.addAttribute("valorAtualizado", valorAtualizado);
             model.addAttribute("jurosMes", jurosMes);
             model.addAttribute("valorFinal", valorFinal);
+            model.addAttribute("mesRecolhimento", requisicao.getMesRecolhimento()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
         } catch (Exception e) {
             model.addAttribute("error", "Ocorreu um erro ao calcular os valores: " + e.getMessage());
