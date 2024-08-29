@@ -63,11 +63,19 @@
         button[type="submit"]:hover {
             background-color: #45a049;
         }
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
+}
     </style>
 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.0.0/js/bootstrap.bundle.min.js"></script>
-
-
 
 </head>
 <body>
@@ -78,7 +86,7 @@
 <!-- Caixa de formulário centralizada -->
 <div class="form-container">
     <h3>Dados Informados</h3>
-    <form th:action="@{/api/calcular}" method="post">
+    <form th:action="@{/api/calcular}" method="post" onsubmit="showLoading()">
         <div>
             <label for="dataInicial">Data Inicial:</label>
             <input type="date" id="dataInicial" name="dataInicial" required>
@@ -95,6 +103,19 @@
         <button type="submit">Calcular</button>
     </form>
 </div>
+
+<!-- Ícone de carregando -->
+<div id="loading" style="display: none; text-align: center; margin-top: 20px;">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Carregando...</span>
+    </div>
+</div>
+
+<script>
+    function showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+</script>
 
 <!-- Mensagem de erro -->
 <div th:if="${error}">
@@ -117,6 +138,7 @@
         <p id="valorFinal" th:text="${#numbers.formatDecimal(valorFinal, 1, 2)}"></p>
     </div>
 </div>
+
 </body>
 </html>
 
