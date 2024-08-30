@@ -4,6 +4,8 @@ import br.gov.ce.tce.calculadoraMonetaria.controller.ApiController;
 import br.gov.ce.tce.calculadoraMonetaria.model.Requisicao;
 import br.gov.ce.tce.calculadoraMonetaria.service.ApiServiceClient;
 import java.time.format.DateTimeFormatter;
+
+import br.gov.ce.tce.calculadoraMonetaria.service.InpcService;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,16 +17,29 @@ import java.time.LocalDate;
 @Getter
 public class CalculadoraMonetariaApplication {
 
+    @Autowired
+    private InpcService inpcService;
+
+    @Autowired
+    Requisicao requisicao;
+
     public static void main(String[] args) {
         SpringApplication.run(CalculadoraMonetariaApplication.class, args);
     }
 
     private final double taxaDeJuros = 0.01;
 
-    private Requisicao requisicao = new Requisicao();
+    public double calculaFatorAcumulado(LocalDate data, double inpc) {
+        LocalDate dataEstabelecida = LocalDate.of(2015, 11, 1);
 
-    @Autowired
-    private ApiServiceClient apiServiceClient;
+        if (data.isBefore(dataEstabelecida)) {
+            return 1.380045;
+        }
+
+        String periodo = calculaPeriodo(data.minusMonths(1));
+
+        return calculaFatorAcumulado(data.minusMonths(1), inpcService.getInpc(periodo)) * (1 + inpc / 100);
+    }
 
     public double calculaValorAtualizado(double fatorAcumuladoInicial, double fatorAcumuladoAtualizado, LocalDate dataInicial, LocalDate dataDeRecolhimento, double valorInicial) {
 
