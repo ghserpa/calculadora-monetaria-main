@@ -1,8 +1,6 @@
 package br.gov.ce.tce.calculadoraMonetaria;
 
-import br.gov.ce.tce.calculadoraMonetaria.controller.ApiController;
 import br.gov.ce.tce.calculadoraMonetaria.model.Requisicao;
-import br.gov.ce.tce.calculadoraMonetaria.service.ApiServiceClient;
 import java.time.format.DateTimeFormatter;
 
 import br.gov.ce.tce.calculadoraMonetaria.service.InpcService;
@@ -41,7 +39,7 @@ public class CalculadoraMonetariaApplication {
         return calculaFatorAcumulado(data.minusMonths(1), inpcService.getInpc(periodo)) * (1 + inpc / 100);
     }
 
-    public double calculaValorAtualizado(double fatorAcumuladoInicial, double fatorAcumuladoAtualizado, LocalDate dataInicial, LocalDate dataDeRecolhimento, double valorInicial) {
+    public double calculaValorAtualizado(double fatorAcumuladoInicial, double fatorAcumuladoAtualizado, double valorInicial) {
 
         double fatorDeAtualizacao = fatorAcumuladoAtualizado / fatorAcumuladoInicial;
 

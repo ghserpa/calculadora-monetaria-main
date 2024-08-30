@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -69,7 +67,7 @@ public class ApiController {
             double fatorAcumuladoAtualizado = calculadoraMonetariaApplication.calculaFatorAcumulado(dataDeRecolhimento.plusMonths(1), inpcRecolhimento);
 
             // Calculando o valor atualizado
-            double valorAtualizado = calculadoraMonetariaApplication.calculaValorAtualizado(fatorAcumuladoInicial, fatorAcumuladoAtualizado, dataInicial, dataDeRecolhimento, valorInicial);
+            double valorAtualizado = calculadoraMonetariaApplication.calculaValorAtualizado(fatorAcumuladoInicial, fatorAcumuladoAtualizado, valorInicial);
 
             // Calculando os juros mensais
             double jurosMes = calculadoraMonetariaApplication.calculaJuros(valorAtualizado, calculadoraMonetariaApplication.getTaxaDeJuros(), dataInicial, dataDeRecolhimento);
