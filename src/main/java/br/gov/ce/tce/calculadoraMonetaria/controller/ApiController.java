@@ -32,20 +32,6 @@ public class ApiController {
     @Autowired
     private InpcService inpcService;
 
-
-    /*@GetMapping("/inpc")
-    public double getInpc(@RequestParam String periodo) {
-        try {
-            // Chamando o serviço e obtendo os dados do INPC para o período solicitado
-            return Double.parseDouble(apiServiceClient.getInpcData(periodo).getFirst()
-                    .resultados().getFirst()
-                    .series().getFirst()
-                    .serie().get(periodo));
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar o INPC para o período: " + periodo, e);
-        }
-    }*/
-
     @PostMapping("/calcular")
     public String calculaValorCorrigido(Requisicao requisicao, Model model) {
 
@@ -108,38 +94,6 @@ public class ApiController {
 
         return "index";
     }
-
-    // Calculando Fator Acumulado
-    /*public double calculaFatorAcumulado(LocalDate data, double inpc) {
-
-        LocalDate dataEstabelecida = LocalDate.of(2015, 11, 1);
-
-        if (cache.containsKey(data)) {
-            return cache.get(data);
-        }
-
-        if (data.isBefore(dataEstabelecida)) {
-            return 1.380045;
-        }
-
-        // Calcula o fator acumulado usando iteração
-        double fatorAcumulado = 1.0;
-        while (!data.isBefore(dataEstabelecida)) {
-            String periodo = calculadoraMonetariaApplication.calculaPeriodo(data.minusMonths(1));
-            double inpcAnterior = getInpc(periodo);
-            fatorAcumulado *= (1 + inpcAnterior / 100);
-            data = data.minusMonths(1);
-        }
-
-        // Armazena o resultado no cache para futuras consultas
-        cache.put(data, fatorAcumulado);
-
-        return fatorAcumulado;
-
-        //String periodo = calculadoraMonetariaApplication.calculaPeriodo(data.minusMonths(1));
-
-        //return calculaFatorAcumulado(data.minusMonths(1), getInpc(periodo)) * (1 + inpc/100);
-    }*/
 
 }
 
