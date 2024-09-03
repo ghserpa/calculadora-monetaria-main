@@ -14,25 +14,51 @@ public class InpcService {
     @Autowired
     private ApiServiceClient apiServiceClient;
 
-    public double getInpc(String periodo) {
+    public Double getInpc(String periodo) {
         Double inpc = inpcLoader.getInpc(periodo);
 
         if (inpc == null) {
             inpc = fetchInpcFromApi(periodo);
-            inpcLoader.addInpc(periodo, inpc);
+
+            if (inpc != null) {
+                inpcLoader.addInpc(periodo, inpc);
+            } /*else {
+                    periodo = getPeriodoAnterior(periodo);
+
+                    if (periodo == null) {
+                        throw new RuntimeException("Erro: Não foi possível encontrar o índice do período.");
+                    }
+                }*/
         }
         return inpc;
     }
 
-    private double fetchInpcFromApi(String periodo) {
+    private Double fetchInpcFromApi(String periodo) {
         try {
             return Double.parseDouble(apiServiceClient.getInpcData(periodo).getFirst()
                     .resultados().getFirst()
                     .series().getFirst()
                     .serie().get(periodo));
+
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar o INPC para o período: " + periodo, e);
+            return null;
         }
     }
 
+    /*private String getPeriodoAnterior(String periodo) {
+
+        int ano = Integer.parseInt(periodo.substring(0, 4));
+        int mes = Integer.parseInt(periodo.substring(4, 6));
+
+        if (mes == 1) {
+            mes = 12;
+            ano -= 1;
+        } else {
+            mes -= 1;
+        }
+
+        return String.format("%04d%02d", ano, mes);
+    }*/
+
 }
+

@@ -118,8 +118,13 @@
 </script>
 
 <!-- Mensagem de erro -->
-<div th:if="${error}">
-    <p style="color: red;" th:text="${error}"></p>
+<div th:if="${error}" style="color: red; font-weight: bold;">
+    <p th:text="${error}"></p>
+</div>
+
+<!-- Mensagem de alerta -->
+<div th:if="${warning}" style="color: blue; font-weight: bold;">
+    <p th:text="${warning}"></p>
 </div>
 
 <!-- Seção de Dados Calculados -->

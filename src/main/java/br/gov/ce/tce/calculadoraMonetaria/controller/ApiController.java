@@ -51,19 +51,45 @@ public class ApiController {
             return "index";
         }
 
+        if (dataInicial.isAfter(dataDeRecolhimento)) {
+            model.addAttribute("error", "Data Inicial não pode ser posterior ao Mês de Recolhimento.");
+            return "index";
+        }
+
+        LocalDate dataAtual = LocalDate.now().plusMonths(1);
+        if (dataInicial.isAfter(dataAtual) || dataDeRecolhimento.isAfter(dataAtual)) {
+            model.addAttribute("error", "Não foi possível encontrar o índice para a data selecionada.");
+            return "index";
+        }
+
         try {
-            // Obtenção do INPC para o cálculo do fator acumulado
+            // Obtenção do periodo para o cálculo do fator acumulado
             String periodoInicial = calculadoraMonetariaApplication.calculaPeriodo(dataInicial);
             String periodoRecolhimento = calculadoraMonetariaApplication.calculaPeriodo(dataDeRecolhimento);
 
             // Obtendo os valores do INPC usando o metodo GET
-            double inpcInicial = inpcService.getInpc(periodoInicial);
+            Double inpcInicial = inpcService.getInpc(periodoInicial);
+            Double inpcRecolhimento = inpcService.getInpc(periodoRecolhimento);
 
-            double inpcRecolhimento = inpcService.getInpc(periodoRecolhimento);
+
+            // Verificando se foi necessário usar o período anterior
+            if (inpcInicial == null) {
+                String periodoAnterior = calculadoraMonetariaApplication.calculaPeriodo(dataInicial.minusMonths(1));
+                inpcInicial = inpcService.getInpc(periodoAnterior);
+                dataInicial = dataInicial.minusMonths(1);
+                model.addAttribute("warning", "Índice atual ainda não disponível. Cálculo feito com o índice do mês anterior.");
+            }
+
+            if (inpcRecolhimento == null) {
+                String periodoAnterior = calculadoraMonetariaApplication.calculaPeriodo(dataDeRecolhimento.minusMonths(1));
+                inpcRecolhimento = inpcService.getInpc(periodoAnterior);
+                dataDeRecolhimento = dataDeRecolhimento.minusMonths(1);
+                model.addAttribute("warning", "Índice atual ainda não disponível. Cálculo feito com o índice do mês anterior.");
+            }
+
 
             // Obtendo os fatores acumulados
             double fatorAcumuladoInicial = calculadoraMonetariaApplication.calculaFatorAcumulado(dataInicial, inpcInicial);
-
             double fatorAcumuladoAtualizado = calculadoraMonetariaApplication.calculaFatorAcumulado(dataDeRecolhimento.plusMonths(1), inpcRecolhimento);
 
             // Calculando o valor atualizado
