@@ -22,13 +22,7 @@ public class InpcService {
 
             if (inpc != null) {
                 inpcLoader.addInpc(periodo, inpc);
-            } /*else {
-                    periodo = getPeriodoAnterior(periodo);
-
-                    if (periodo == null) {
-                        throw new RuntimeException("Erro: Não foi possível encontrar o índice do período.");
-                    }
-                }*/
+            }
         }
         return inpc;
     }
@@ -44,21 +38,6 @@ public class InpcService {
             return null;
         }
     }
-
-    /*private String getPeriodoAnterior(String periodo) {
-
-        int ano = Integer.parseInt(periodo.substring(0, 4));
-        int mes = Integer.parseInt(periodo.substring(4, 6));
-
-        if (mes == 1) {
-            mes = 12;
-            ano -= 1;
-        } else {
-            mes -= 1;
-        }
-
-        return String.format("%04d%02d", ano, mes);
-    }*/
 
 }
 
