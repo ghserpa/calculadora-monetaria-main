@@ -56,6 +56,12 @@ public class ApiController {
             return "index";
         }
 
+        LocalDate dataEstabelecida = LocalDate.of(2015, 10, 1);
+        if (dataInicial.isBefore(dataEstabelecida) || dataDeRecolhimento.isBefore(dataEstabelecida)) {
+            model.addAttribute("error", "Data inválida. Por favor, insira uma data a partir de 1 de outubro de 2015.");
+            return "index";
+        }
+
         LocalDate dataAtual = LocalDate.now().plusMonths(1);
         if (dataInicial.isAfter(dataAtual) || dataDeRecolhimento.isAfter(dataAtual)) {
             model.addAttribute("error", "Não foi possível encontrar o índice para a data selecionada.");
